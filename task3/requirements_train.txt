@@ -1,0 +1,9 @@
+pandas
+numpy
+transformers==4.40.1
+peft==0.10.0
+tqdm
+beautifulsoup4
+deepspeed
+accelerate
+

@@ -213,7 +213,7 @@ for i in range(len(ts)):
 # In[ ]:
 
 print(len(results))
-with open(f"{path_pre}../test_features/{save_name}.pkl", 'wb') as f:
+with open(f"{path_pre}../train_features/{save_name}.pkl", 'wb') as f:
     pickle.dump(results, f)
 
 # In[ ]:

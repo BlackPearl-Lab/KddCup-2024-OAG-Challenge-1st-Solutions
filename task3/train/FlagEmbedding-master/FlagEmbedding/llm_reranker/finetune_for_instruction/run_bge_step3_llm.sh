@@ -1,15 +1,12 @@
 #!/bin/bash
 
-PATH_PRE="/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/zhouyang96"
-source activate ${PATH_PRE}/conda_env/zy_from_chr_right_right
-
 
 # model_name_or_path=/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/model_path/Mistral-7B-v0.3
-model_name_or_path=/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/zhouyang96/zy_model_path/SOLAR-10.7B-v1.0
-DATA_NAME="v3_merge_123_new_1_qlora_recall_top_200_forrank_100_otherinfo_v2"
-DATA_DIR=${PATH_PRE}/competiitons/kdd2024/task3/data/
-MODEL_USE='SOLAR_5epoch_sm03_v3_merge_123_new_1_qlora_recall_top_200_forrank_100_otherinfo_v2'
-OUTPUT=${PATH_PRE}/competiitons/kdd2024/task3/model_save/${MODEL_USE}
+model_name_or_path=../../../../../model_save/SOLAR-10.7B-v1.0
+DATA_NAME="v3_round1_qlora_recall_top_100_for_rank"
+DATA_DIR=../../../../../data/
+MODEL_USE='v3_round1_qlora_recall_top_100_for_rank_model'
+OUTPUT=../../../../../model_save/${MODEL_USE}
 
 # export CUDA_VISIBLE_DEVICES=5,6,7
 torchrun --nproc_per_node 8 \
