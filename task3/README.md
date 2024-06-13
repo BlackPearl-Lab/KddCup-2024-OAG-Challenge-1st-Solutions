@@ -21,6 +21,7 @@ pip install -r requirements_infer.txt
 ## step1.Download data and model
 
 
+
 (1).Download the LLM to the specified folder.
 https://huggingface.co/Salesforce/SFR-Embedding-Mistral<br>
 https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0<br>
