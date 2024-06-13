@@ -5,7 +5,7 @@ The rank1 solution on the test set for the WhoIsWho-IND task [Link](https://www.
 
 This solution basically only uses LLM, and the base model is ChatGLM3-6b-32k. The key point of this solution is to iteratively increase the concentration of positive examples during inference.
 
-![core idea](./img.png "core idea")
+![core idea](./img1.png "core idea")
 
 This solution has high resource requirements, and 8*A100 is recommended.
 ### preparation
