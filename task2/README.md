@@ -1,5 +1,15 @@
 Team BlackPearl PST's solution
 
+Machine:
+8 * A100 80G
+186-core CPU
+928G RAM
+
+Running Time:
+The estimated running time for train is 50 hours.
+The estimated running time for inference is 60 hours.
+
+
 **The theme of our entire solution is Grafted Learning**
 
 
