@@ -1,0 +1,48 @@
+{
+  "train_micro_batch_size_per_gpu": "auto",
+  "zero_allow_untested_optimizer": true,
+  "fp16": {
+    "enabled": false,
+    "loss_scale": 0,
+    "initial_scale_power": 16,
+    "loss_scale_window": 1000,
+    "hysteresis": 2,
+    "min_loss_scale": 1
+  },
+  "zero_optimization": {
+    "stage": 1,
+    "offload_param": {
+      "device": "auto"
+    },
+    "offload_optimizer": {
+      "device": "auto"
+    },
+    "allgather_partitions": true,
+    "allgather_bucket_size": 5e8,
+    "overlap_comm": false,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 5e8,
+    "contiguous_gradients": true
+  },
+  "scheduler": {
+    "type": "WarmupDecayLR",
+    "params": {
+      "last_batch_iteration": -1,
+      "total_num_steps": "auto",
+      "warmup_min_lr": 3e-06,
+      "warmup_max_lr": "auto",
+      "warmup_num_steps": "auto",
+      "warmup_type": "cosine"
+    }
+  },
+  "optimizer": {
+    "type": "AdamW",
+    "params": {
+      "lr": "auto",
+      "betas": "auto",
+      "eps": "auto",
+      "weight_decay": "auto"
+    }
+  },
+  "gradient_accumulation_steps": 16
+}

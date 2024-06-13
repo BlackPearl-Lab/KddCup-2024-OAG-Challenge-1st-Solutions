@@ -1,0 +1,64 @@
+[base]
+type = ml-easy-job
+
+[resource]
+usergroup = hadoop-dpsr
+queue = root.zw05_training_cluster.hadoop-dpsr.llm
+
+[roles]
+worker.script = sh run_bge_step3_llm.sh
+workers = 1
+worker.memory = 800000
+worker.vcore = 64
+worker.gcores80g = 8
+worker.ports = 1
+
+[am]
+afo.app.am.resource.mb = 4096
+
+[tensorboard]
+with.tensor.board = false
+
+[docker]
+afo.docker.image.name = registryonline-hulk.sankuai.com/custom_prod/com.sankuai.data.hadoop.gpu/data-hadoop-hdp_flashattn2.3.3:apex23.05-pytorch2.1.0-py39-cuda12.2.1-cudnn8.9.4.25-nccl2.19.3-devel-centos7-142ea33a
+
+[data]
+afo.data.prefetch = false
+engine.log.monitor.start_test = false
+
+[conda]
+
+[config]
+
+[scheduler]
+afo.app.yarn.allocate.timeout.seconds = 0
+
+[others]
+afo.app.env.YARN_CONTAINER_RUNTIME_DOCKER_SHM_SIZE_BYTES = 343597383680
+afo.app.env.YARN_CONTAINER_RUNTIME_DOCKER_ULIMITS = memlock=-1
+afo.network.mode = RDMA
+with_requirements = false
+afo.afo-base.image.version = llm_sup
+afo.use.acceleration.submission = true
+afo.dolphinfs.otherusers = hadoop-dpsr
+afo.app.yarn.allocate.timeout.seconds = 0
+mlp.notice.phone.call = attempt.delay,job.failed
+afo.engine.healthy_check.enable = false
+afo.engine.healthy_check.before_run_check.enable = true
+afo.engine.healthy_check.init_hung.log_monitoring_pattern = tokens per second:
+afo.engine.healthy_check.init_hung.log_monitoring_timeout = 1800
+afo.engine.healthy_check.running_check.log_monitoring_pattern = MFU: {MFU}
+afo.engine.healthy_check.running_check.hung_timeout = 900
+afo.engine.healthy_check.running_check.exception_expr = MFU < 30
+afo.engine.healthy_check.running_check.exception_timeout = 600
+source.system = kinet
+project.name = default
+client.git.revision.publish = false
+
+[failover]
+afo.app.support.engine.failover = true
+afo.role.worker.not.nccl_not_ready = true
+afo.role.worker.task.attempt.max.retry = 1
+afo.use.nic.down.new.strategy = true
+afo.healthy_check.watch_tasks = worker_3
+
