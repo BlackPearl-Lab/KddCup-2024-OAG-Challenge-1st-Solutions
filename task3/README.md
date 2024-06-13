@@ -56,7 +56,7 @@ pip install -r requirements_train.txt
 (1).Download the LLM to the specified folder.
 https://huggingface.co/Salesforce/SFR-Embedding-Mistral<br>
 https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0<br>
-a.Place these two models in the ./model_save folder.<br>
+Place these two models in the ./model_save folder.<br>
 
 (2). download train data from  https://www.biendata.xyz/competition/aqa_kdd_2024/ into data/AQA/
 
@@ -73,4 +73,5 @@ v3_round1_qlora_recall_top_100_for_rank_model
 we did not provide a complete training script for several reasons. First, the full training process is quite complex and we were under time constraints. Second, we are using an iterative approach, and by viewing our prediction code, the complete process can be clearly understood. We will update the complete code in the near future. Third, the full code requires about 5 days to run on an 8-card A100*80G setup.
 
 
-
+☎📧<br>
+If you have any questions, Welcome to contact us: zhouyang96@meituan.com
