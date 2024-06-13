@@ -57,7 +57,7 @@ sh scripts/train_author_len_500.sh
 
 All inference results are stored in the `./test_result` folder.
 
-We have prepared the trained weights, click [here](https://www.kaggle.com/datasets/tilbur/kdd-2024-track1model) to download.
+We have prepared the trained weights, click [here](https://drive.google.com/file/d/1MWf_aEVPuzHOxoqUp6NMqdgsIXQV61ys/view?usp=sharing) to download.
 ```bash
 cd inference
 ```
