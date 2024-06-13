@@ -32,6 +32,7 @@ parser.add_argument('--model_path',default='ZhipuAI/chatglm3-6b-32k')
 parser.add_argument('--pub_path', help='The path to the pub file',default='test_pub.json')
 parser.add_argument('--eval_path',default='eval_data.json')
 parser.add_argument('--save_name', default='tmp')
+parser.add_argument('--data_path', default='tmp')
 parser.add_argument('--saved_dir',default='./eval_result')
 args = parser.parse_args()
 
@@ -62,20 +63,8 @@ NO_TOKEN_IDS = tokenizer.convert_tokens_to_ids("no")
 
 import pandas as pd
 
-# valid = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_final_title_moreinfo_mistral_rag_processtext.pickle')
-# valid = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_final_title_alltext_moreinfo_processtext.pickle')
-# valid = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_final_title_addbib_moreinfo_processtext.pickle')
-# valid = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_final_title_moreinfo_processtext.pickle')
-# valid = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_final_title_addcite_moreinfo_processtext.pickle')
-# valid = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_final_title_moreinfo_addcite_mistralrag_processtext.pickle')
-valid = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_final_title_addbib_addcite_moreinfo_processtext.pickle')
-# valid = valid[valid['text'].apply(lambda x : len(x) < 200000)].reset_index(drop=True)
-# valid = valid.loc[:800].reset_index(drop=True)
+valid = pd.read_pickle(args.data_path)
 print(f"Valid size:{len(valid)}")
-# import re
-# pattern = r"The rank of this paper is \d+, total rank is \d+"
-#
-# dev_texts = valid['text'].apply(lambda x : re.sub(pattern, "", x)).tolist()
 dev_texts = valid['process_text'].tolist()
 dev_idx = valid['idx'].tolist()
 

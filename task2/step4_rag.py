@@ -354,8 +354,8 @@ def evalaute(text, model):
 
 
 
-def get_test_abstract_addcite(model):
-    data1 = pd.read_pickle('./data/llm_final_title_addbib.pickle')
+def get_test_abstract_addcite(model, path):
+    data1 = pd.read_pickle(f'./data/{path}.pickle')
     index = faiss.read_index('./data/all_title.bin')
     print("加载完成 迁移到gpu中")
     index = faiss.index_cpu_to_all_gpus(index)
@@ -410,7 +410,8 @@ def get_test_abstract_addcite(model):
     df1 = pd.DataFrame(source_info)
     df2 = pd.DataFrame(ref_info)
     data1 = pd.concat([data1, df1, df2], axis=1)
-    data1.to_pickle('./data/llm_final_title_addbib_addcite_moreinfo.pickle')
+    data1.to_pickle(f'./data/{path}_moreinfo.pickle')
+
 
 def train_title_abstract_addcite(model):
     data1 = pd.read_pickle(f'./data/llm_notsample_with_allinfo_addbib_addcite.pickle')
@@ -469,21 +470,15 @@ def train_title_abstract_addcite(model):
 import pickle as pkl
 def get_test_abstract_mistral():
     data1 = pd.read_pickle('./data/llm_final_title.pickle')
-    data = []
-    with open('../OAG_data/new_DBLP.json', 'r') as f:
-        for line in f.readlines():
-            data.append(json.loads(line.strip('\n')))
-    # data.append({'title': '', 'abstract': '', 'keywords': [], 'year': '', 'authors': [], 'venue': '', 'n_citation': 0,
-    #              'venue_cite': 0})
     paper_cut = np.array_split(data, 8)
     title_embed = []
     for i in range(8):
-        with open(f'../track1/test_embed_{i}.pkl', 'rb') as f:
+        with open(f'./data/test_embed_{i}.pkl', 'rb') as f:
             title_embed.append(pkl.load(f))
     title_embed = np.concatenate(title_embed, axis=0)
     paper_embed = []
     for i in range(8):
-        with open(f'../track1/paper(title_year_keywords_authors_venue)_embedding(SFR-Embedding-Mistral)_{i}.pkl', 'rb') as f:
+        with open(f'./data/all_paper_embed_{i}.pkl', 'rb') as f:
             paper_embed.append(pkl.load(f))
     paper_index = []
     for i in range(8):
@@ -647,9 +642,13 @@ if __name__ == '__main__':
     train_title_abstract_addcite(model)
     #最终训练文件生成
     prepare_llm_moreinfo_multiprocess_addcite(path='llm_notsample_with_allinfo_addbib_addcite_moreinfo')
+
     #推理
-    get_test_abstract_addcite(model)
-    # get_test_abstract_mistral()
+    get_test_abstract_addcite(model, 'llm_final_title_addbib')
+    get_test_abstract_addcite(model, 'llm_final_title')
+    get_test_abstract_mistral()
 
     #最终推理文件生成
-    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_title_addbib_addcite_moreinfo')
+    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_title_addbib_moreinfo')
+    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_title_moreinfo')
+    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_onlyref_mistral')

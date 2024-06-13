@@ -728,7 +728,7 @@ def gen_kddcup_valid_submission_bert(model_name="scibert"):
 
 
 if __name__ == "__main__":
-    origin_dir = '/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/'
+    origin_dir = './'
     settings.OUT_DIR = origin_dir + 'out/deberta_large_3fold'
 
     eval_test_papers_bert(model_name="deberta-large")   #利用嫁接模型得到每个样本的hidden_state

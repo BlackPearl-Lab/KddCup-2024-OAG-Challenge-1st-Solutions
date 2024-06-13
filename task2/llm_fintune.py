@@ -106,15 +106,9 @@ def main():
 
     import pandas as pd
 
-    # pos = pd.read_pickle('/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_notsample_all.pickle')
-    # pos = pos[pos['text'].apply(lambda x : len(x) < 100000)].reset_index(drop=True)
     data = pd.read_pickle(
-        '/mnt/dolphinfs/hdd_pool/docker/user/hadoop-dpsr/chenhaoru/zhipu_kdd/track2/data/llm_notsample_with_allinfo_addcite_processtext.pickle')
-    # data = data[data['process_text'].apply(lambda x : len(x) < 6809)].reset_index(drop=True)
-    # train = pd.concat([pos, data], axis=0).reset_index(drop=True)
+        './data/llm_notsample_with_allinfo_addcite_processtext.pickle')
     print(f"Train size:{len(data)}")
-    # train_texts = data['text'].tolist()
-    # train_labels = data['label'].tolist()
 
     train_dataset = INDallinfoDataSet(
         data,
@@ -126,8 +120,8 @@ def main():
         task_type=TaskType.CAUSAL_LM,
         inference_mode=False,
         r=model_args.lora_rank,
-        # target_modules=['query_key_value'],
-        target_modules=['q_proj', 'k_proj', 'v_proj', 'o_proj'],
+        target_modules=['query_key_value'],
+        # target_modules=['q_proj', 'k_proj', 'v_proj', 'o_proj'],
         # target_modules=["W_pack", "o_proj", "gate_proj", "up_proj", "down_proj"],
         # target_modules=TRANSFORMERS_MODELS_TO_LORA_TARGET_MODULES_MAPPING['mistral'],
         lora_alpha=model_args.lora_alpha,
