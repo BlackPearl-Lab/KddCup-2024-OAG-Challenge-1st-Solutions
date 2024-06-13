@@ -9,6 +9,11 @@ Machine:
 186-core CPU
 928G RAM
 
+python 3.10
+
+torch2.2.2+cu1.12.1
+
+
 Running Time:
 
 The estimated running time for train is 50 hours.
