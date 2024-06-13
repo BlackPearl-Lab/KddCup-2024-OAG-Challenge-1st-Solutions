@@ -1,5 +1,16 @@
 Team BlackPearl PST's solution
 
+Machine:
+8 * A100 80G
+186-core CPU
+928G RAM
+
+Running Time:
+
+The estimated running time for train is 50 hours.
+The estimated running time for inference is 60 hours.
+
+
 **The theme of our entire solution is Grafted Learning**
 
 
@@ -61,3 +72,22 @@ leaderboard score: 0.520,   privateboard score: 0.472
 
 Fianl result:
 private board score: 0.488
+
+inference & train scripts
+```
+torchrun --nproc_per_node 8 step0_pretrain_0.py
+torchrun --nproc_per_node 8 step0_pretrain_1.py
+python step1_build_bert_input.py
+python step2_train_bert.py
+python step3_build_llm_input.py
+sh mistral_embed_inference.sh
+python step4_rag.py
+sh train.sh
+sh inference_0_0.sh
+sh inference_0_1.sh
+sh inference_1_0.sh
+sh inference_1_1.sh
+sh inference_2_0.sh
+sh inference_2_1.sh
+python merge.py
+```
