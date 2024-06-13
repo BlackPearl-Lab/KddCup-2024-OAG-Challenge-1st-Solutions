@@ -25,7 +25,7 @@ pip install -r requirements_infer.txt
 https://huggingface.co/Salesforce/SFR-Embedding-Mistral<br>
 https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0<br>
 a.Place these two models in the ./model_save folder.<br>
-b.Download the LoRa parameters from here() and place them in the ./model_save folder.
+b.Download the LoRa parameters from here(https://modelscope.cn/models/sayoulala/KDDCup2024_task3_model/files) and place them in the ./model_save folder.
 <br>(2).Download the test data from https://www.biendata.xyz/competition/aqa_kdd_2024/  into /data/AQA-test-public/
 
 ## step2. Download the AQA-test-public.zip and extract it to the data folder.
