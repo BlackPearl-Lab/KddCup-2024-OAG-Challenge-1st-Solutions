@@ -1,7 +1,7 @@
 
 # Introduction
 
-**KDD Cup 2024 OAG-Challenge Solutions for the Three Tracks Champion**
+**KDD Cup 2024 OAG-Challenge 1st Solutions (Task 1/2/3)**
 
 **Team**: BlackPearl Lab
 
