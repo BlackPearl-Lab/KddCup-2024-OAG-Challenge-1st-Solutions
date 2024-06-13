@@ -19,7 +19,7 @@ torch 2.3.0+cu121 (It may also be compatible with some lower versions.)
 pip install -r requirements_infer.txt
 ```
 ## step1.Download the LLM to the specified folder.
-https://huggingface.co/Salesforce/SFR-Embedding-Mistral
+https://huggingface.co/Salesforce/SFR-Embedding-Mistral<br>
 https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0
 
 a.Place these two models in the ./model_save folder.
@@ -42,5 +42,5 @@ sh run.sh
 The complete prediction process includes **7 models** and takes approximately **40** hours to complete on resources with 8 A100*80G cards.
 The latest result file is located in the sub_test directory, named merge_7_model_last.txt.
 # Train Process
-## On the way ～
+
 
