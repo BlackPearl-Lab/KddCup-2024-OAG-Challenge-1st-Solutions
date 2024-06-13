@@ -1,5 +1,9 @@
 Team BlackPearl PST's solution
 
+Model Download path:https://drive.google.com/file/d/1G00HRk7YTFPGujhU67dkRaXD0g0YblNq/view?usp=sharing
+
+unzip and put this into '/kddcup-2024/task2/'
+
 Machine:
 8 * A100 80G
 186-core CPU
