@@ -6,6 +6,7 @@ Machine:
 928G RAM
 
 Running Time:
+
 The estimated running time for train is 50 hours.
 The estimated running time for inference is 60 hours.
 
