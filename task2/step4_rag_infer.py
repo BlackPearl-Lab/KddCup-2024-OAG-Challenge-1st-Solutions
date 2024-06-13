@@ -639,7 +639,13 @@ if __name__ == '__main__':
     model = torch.nn.parallel.DataParallel(model)
     model.load_state_dict(torch.load('./out/bge_m3_simcse_pretrain.bin',map_location='cpu'))
     eval_all_title(model, dataloader)
-    train_title_abstract_addcite(model)
-    #最终训练文件生成
-    prepare_llm_moreinfo_multiprocess_addcite(path='llm_notsample_with_allinfo_addbib_addcite_moreinfo')
 
+    #推理
+    get_test_abstract_addcite(model, 'llm_final_title_addbib')
+    get_test_abstract_addcite(model, 'llm_final_title')
+    get_test_abstract_mistral()
+
+    #最终推理文件生成
+    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_title_addbib_moreinfo')
+    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_title_moreinfo')
+    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_onlyref_mistral')

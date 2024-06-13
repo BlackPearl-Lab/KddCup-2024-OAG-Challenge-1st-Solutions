@@ -731,7 +731,5 @@ if __name__ == "__main__":
     origin_dir = './'
     settings.OUT_DIR = origin_dir + 'out/deberta_large_3fold'
 
-    eval_test_papers_bert(model_name="deberta-large")   #利用嫁接模型得到每个样本的hidden_state
-    for fold in range(3):
-        train(model_name="deberta-large", fold=fold)  # 训练
-        eval(model_name='deberta-large', fold=fold)
+    get_test_embed(model_name="deberta-large")   #拿到测试集的嫁接模型的hidden_state
+    gen_kddcup_valid_submission_bert(model_name="deberta-large")   #推理

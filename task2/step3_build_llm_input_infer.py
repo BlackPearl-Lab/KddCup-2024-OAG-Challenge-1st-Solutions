@@ -477,5 +477,6 @@ def prepare_llm_test_input():
 
 
 if __name__ == "__main__":
-    prepare_llm_input()
+    prepare_llm_test_input()
+    prepare_llm_addbib_test_input()
 
