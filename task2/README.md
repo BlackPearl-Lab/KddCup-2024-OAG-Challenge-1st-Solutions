@@ -29,7 +29,7 @@ Next, based on the bert obtained through training, Kfold cross-validation is per
 
 Then based on the title of the original paper and the title of the reference, a series of detailed information of the original text and reference is recalled from the DBLP.json paper library. At the same time, feature engineering was performed to list the total citations of each author, the total citations of journals, and the total citations of the author's institution to represent the value of the author, journal, and institution.
 
-Finally, all the information is spliced ​​into a long text, LLM is used to make binary classification judgments, and the final probability is output.
+Finally, the features are turned into text, grafted into the input text of ChatGLM, LLM is used for binary classification judgment, and the final probability is output.
 
 The final training and inference text is as follows:
 
