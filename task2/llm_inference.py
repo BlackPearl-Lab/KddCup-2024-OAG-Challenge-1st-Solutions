@@ -42,7 +42,8 @@ accelerator = Accelerator()
 device = torch.device(0)
 
 batch_size = 1
-
+import os
+os.makedirs('./eval_result', exist_ok=True)
 # model = AutoModelForCausalLM.from_pretrained(args.model_path, load_in_8bit=False, trust_remote_code=True).half()
 
 q_config = BitsAndBytesConfig(load_in_4bit=True,
