@@ -123,7 +123,7 @@ SEED = 2020
 seed_everything(SEED)
 
 DATA_PATH = "./data/"
-BERT_PATH = "/home/hadoop-dpsr/dolphinfs_hdd_hadoop-dpsr/model_path/bge-m3"
+BERT_PATH = "BAAI/bge-m3"
 PROMPT_LEN = 1024
 WIKI_LEN = 1024
 MAX_LEN = 1024
@@ -182,7 +182,7 @@ class LLMRecallDataSet(torch.utils.data.Dataset):
 
 class TitleDataSet(torch.utils.data.Dataset):
     def __init__(self, data):
-        self.tokenizer = AutoTokenizer.from_pretrained('/home/hadoop-dpsr/dolphinfs_hdd_hadoop-dpsr/model_path/deberta-v3-large', use_fast=True)
+        self.tokenizer = AutoTokenizer.from_pretrained('microsoft/deberta-v3-large', use_fast=True)
         self.data = data
 
     def __len__(self):
@@ -278,7 +278,7 @@ class RecallModel(nn.Module):
 class TitleModel(nn.Module):
     def __init__(self):
         super(TitleModel, self).__init__()
-        self.deberta = AutoModel.from_pretrained('/home/hadoop-dpsr/dolphinfs_hdd_hadoop-dpsr/model_path/deberta-v3-large')
+        self.deberta = AutoModel.from_pretrained('microsoft/deberta-v3-large')
         self.linear = nn.Linear(1024, 2)
 
     def forward(self, paper, source):
@@ -325,7 +325,7 @@ def eval_all_title(model, dataloader):
                 output = model(batch).cpu().detach().numpy()
             faiss.normalize_L2(output)
             index.add(output)
-    faiss.write_index(index, './data/all_title_alltext.bin')
+    faiss.write_index(index, './data/all_title.bin')
 
 
 from os.path import join
@@ -470,7 +470,7 @@ def train_title_abstract_addcite(model):
 import pickle as pkl
 def get_test_abstract_mistral():
     data1 = pd.read_pickle('./data/llm_final_title.pickle')
-    paper_cut = np.array_split(data, 8)
+    paper_cut = np.array_split(data[:-1], 8)
     title_embed = []
     for i in range(8):
         with open(f'./data/test_embed_{i}.pkl', 'rb') as f:
