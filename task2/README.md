@@ -107,3 +107,27 @@ python step3_build_llm_input.py
 python step4_rag.py
 sh train.sh
 ```
+by the way, If we only reproduce the single model score of 0.481, we only need to change a few lines of code and change the execution script, and the inference time will be 4 hours, as shown below
+```
+you need to change step4_rag_infer.py's code
+delete line 645,646,650,651, then the code will like this:
+    #推理
+    get_test_abstract_addcite(model, 'llm_final_title_addbib')
+    #get_test_abstract_addcite(model, 'llm_final_title')
+    #get_test_abstract_mistral()
+
+    #最终推理文件生成
+    prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_title_addbib_moreinfo')
+    #prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_title_moreinfo')
+    #prepare_llm_moreinfo_multiprocess_addcite(path='llm_final_onlyref_mistral')
+```
+the singe model inference script will be like this:
+```
+python step2_infer_bert.py
+python step3_build_llm_input_infer.py
+python step4_rag_infer.py
+sh inference_1_0.sh
+sh inference_1_1.sh
+python merge1.py
+```
+
