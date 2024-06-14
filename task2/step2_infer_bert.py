@@ -455,16 +455,17 @@ def get_test_embed(model_name='scibert'):
     papers = utils.load_json(data_dir, "paper_source_trace_test_wo_ans.json")
 
     BERT_MODEL = "microsoft/deberta-v3-large"
+
     config = AutoConfig.from_pretrained(BERT_MODEL)
     config.update({'max_position_embeddings': MAX_SEQ_LENGTH, 'num_labels': 2})
     tokenizer = AutoTokenizer.from_pretrained(BERT_MODEL)
     os.makedirs('./data/test_embed', exist_ok=True)
-    sub_example_dict = utils.load_json(data_dir, "submission_example_valid.json")
+    sub_example_dict = utils.load_json(data_dir, "submission_example_test.json")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("device", device)
     model = AutoModelForSequenceClassification.from_pretrained(BERT_MODEL, config=config)
-    model.load_state_dict(torch.load('./out/grafting_learning_deberta_large/pretrain_epoch1.bin', map_location='cpu'))
+    model.load_state_dict(torch.load('./out/grafting_learning_deberta/pretrain_epoch1.bin', map_location='cpu'))
     model = model.deberta
     model = torch.nn.parallel.DataParallel(model)
     mean_pool = MeanPooling()
@@ -510,8 +511,6 @@ def get_test_embed(model_name='scibert'):
             bid_to_title[bid] = title
             if b_idx > n_refs:
                 n_refs = b_idx
-        total += n_refs
-        miss += (n_refs - len(bid_to_title.keys()))
         bib_to_contexts = utils.find_bib_context(xml)
         # bib_sorted = sorted(bib_to_contexts.keys())
         bib_sorted = ["b" + str(ii) for ii in range(n_refs)]
@@ -537,91 +536,6 @@ def get_test_embed(model_name='scibert'):
         np.save(f'./data/test_embed/{cur_pid}.npy', final)
 
 
-def eval(model_name="scibert", fold=0):
-    print("model name", model_name)
-    train_texts = []
-    dev_texts = []
-    train_labels = []
-    dev_labels = []
-    train_idx = []
-    dev_idx = []
-    data_year_dir = join(settings.DATA_TRACE_DIR, "PST")
-    print("data_year_dir", data_year_dir)
-
-
-    train = pd.read_pickle(f'./data/train_extral_fold{fold}.pickle')
-    valid = pd.read_pickle(f'./data/valid_extral_fold{fold}.pickle')
-
-    for _, row in train.iterrows():
-        train_texts.append(row['text'])
-        train_labels.append(row['label'])
-        train_idx.append(row['idx'])
-
-    for _, row in valid.iterrows():
-        dev_texts.append(row['text'])
-        dev_labels.append(row['label'])
-        dev_idx.append(row['idx'])
-
-    print("Train size:", len(train_texts))
-    print("Dev size:", len(dev_texts))
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-    BERT_MODEL = "microsoft/deberta-v3-large"
-    config = AutoConfig.from_pretrained(BERT_MODEL)
-    config.update({'max_position_embeddings': MAX_SEQ_LENGTH, 'num_labels': 2})
-
-    tokenizer = AutoTokenizer.from_pretrained(BERT_MODEL)
-    model = AutoModelForSequenceClassification.from_pretrained(BERT_MODEL, config=config)
-    state_dict = torch.load(f'./out/deberta_large_3fold_{fold}/pytorch_model.bin', map_location='cpu')
-    model.load_state_dict(state_dict, strict=False)
-    model = torch.nn.parallel.DataParallel(model)
-    model.to(device)
-
-    dev_dataset = KddMoveLearningDataSet(dev_texts, dev_labels, tokenizer, MAX_SEQ_LENGTH, f'./data/dev_grafting_learing_hidden_state_pretrain_fold{fold}.npy')
-
-    BATCH_SIZE = 64
-    dev_dataloader = get_data_loader(dev_dataset, BATCH_SIZE, shuffle=False)
-    model.eval()
-
-    eval_loss = 0
-    nb_eval_steps = 0
-    predicted_labels, correct_labels = [], []
-    autocast = torch.cuda.amp.autocast
-    for step, batch in tqdm(enumerate(dev_dataloader), total=len(dev_dataloader)):
-        for k, v in batch.items():
-            batch[k] = v.cuda()
-
-        with torch.no_grad():
-            with autocast():
-                input_embed = model.module.get_input_embeddings()(batch['input_ids'])
-                attention_mask = torch.concat([torch.tensor([[1] for i in range(batch['attention_mask'].shape[0])],
-                                                            device=batch['attention_mask'].device),
-                                               batch['attention_mask']], dim=1)
-                input_embed = torch.cat([batch['input_embed'].view(input_embed.shape[0], 1, 1024), input_embed], dim=1)
-                outputs = model(inputs_embeds=input_embed, attention_mask=attention_mask)
-                logits = outputs.logits
-        outputs = torch.softmax(logits, dim=1).cpu().numpy()[:, 1]
-        label_ids = batch['labels'].to('cpu').numpy()
-
-        predicted_labels += list(outputs)
-        correct_labels += list(label_ids)
-    dev = pd.DataFrame({'pred':predicted_labels, 'label':correct_labels, 'idx':dev_idx})
-    dev_idx_s = set(dev_idx)
-
-    map = []
-    for idx in dev_idx_s:
-        cut = dev[dev['idx'] == idx].reset_index(drop=True)
-        p = cut['pred'].tolist()
-        l = cut['label'].tolist()
-        ap = average_precision_score(l, p)
-        map.append(ap)
-    map = np.mean(map)
-    print(map)
-    valid['pred'] = predicted_labels
-    valid.to_pickle(f'./data/valid_extral_withlogits_fold{fold}.pickle')
-
 
 import pickle
 def gen_kddcup_valid_submission_bert(model_name="scibert"):
@@ -630,6 +544,7 @@ def gen_kddcup_valid_submission_bert(model_name="scibert"):
     papers = utils.load_json(data_dir, "paper_source_trace_test_wo_ans.json")
 
     BERT_MODEL = "microsoft/deberta-v3-large"
+
     config = AutoConfig.from_pretrained(BERT_MODEL)
     config.update({'max_position_embeddings': MAX_SEQ_LENGTH, 'num_labels': 2})
     tokenizer = AutoTokenizer.from_pretrained(BERT_MODEL)
@@ -639,7 +554,7 @@ def gen_kddcup_valid_submission_bert(model_name="scibert"):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("device", device)
     model = AutoModelForSequenceClassification.from_pretrained(BERT_MODEL, config=config)
-    model.load_state_dict(torch.load(f"./out/deberta_large_3fold_2/pytorch_model.bin"))
+    model.load_state_dict(torch.load(f"./out/deberta_large_3fold2/pytorch_model.bin"))
     model = torch.nn.parallel.DataParallel(model)
 
     model.to(device)
