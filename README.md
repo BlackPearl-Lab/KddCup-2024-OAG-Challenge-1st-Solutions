@@ -1,7 +1,7 @@
 
 # Introduction
 
-**KDD Cup 2024 OAG-Challenge 1st Solutions (WhoIsWho-IND Task/AQA Task/PST Task)**
+**KDD Cup 2024 OAG-Challenge 1st Solutions (WhoIsWho-IND Task、AQA Task、PST Task)**
 
 **Team**: BlackPearl Lab
 
